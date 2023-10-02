@@ -2,11 +2,16 @@ import csv
 import time
 import random
 
-stations = ['Heerenveen', 'Utrecht-Centraal', 'Driebergen-Zeist']
 
 with open("berichten.csv", 'w', newline='') as f:
     csv_writer = csv.writer(f)
     csv_writer.writerow(["Naam", "Datum & Tijd", "Station", "Bericht"])
+
+def selecteer_station():
+    with open('stations.txt', 'r') as file:
+        stations = (file.read().splitlines())
+        keuze = random.choice(stations)
+        return keuze
 
 
 def input_naam():  # creeër een functie om de naam van een bezoeker te vragen
@@ -34,10 +39,12 @@ def input_bericht():  # creeër een functie om het bericht van een bezoeker te k
 def output_csv():
     with open("berichten.csv", "a", newline='') as f:
         csv_writer = csv.writer(f)
-        csv_writer.writerow([naam, time.strftime('%H:%M:%S, %d %b %y'), stations[random.randint(0, 2)], bericht])
+        csv_writer.writerow([naam, time.strftime('%H:%M:%S, %d %b %y'), station, bericht])
 
 
 while True:
+    selecteer_station()
     naam = input_naam()
     bericht = input_bericht()
+    station = selecteer_station()
     output_csv()
