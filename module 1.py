@@ -16,12 +16,12 @@ def selecteer_station():
 
 def input_naam():  # creeër een functie om de naam van een bezoeker te vragen
     naam = input("Wat is uw naam?")
-    if len(naam) < 51:  # bepaal of de ingevoerde naam niet te lang is
-        return naam  # sla de naam op als variabele
-    elif len(naam) == 0:
+    if len(naam) == 0:
         print('Naam is anoniem')
-        naam = 'anoniem'
+        naam = 'Anoniem'
         return naam
+    elif len(naam) < 51:  # bepaal of de ingevoerde naam niet te lang is
+        return naam  # sla de naam op als variabele
     else:  # als de naam die de bezoeker heeft ingevuld te lang is
         print("Uw naam is te lang")
         input_naam()  # herhaal de functie, vraag om een nieuwe input
