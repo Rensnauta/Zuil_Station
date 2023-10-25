@@ -2,10 +2,9 @@ import csv
 import time
 import random
 
-
 with open("berichten.csv", 'w', newline='') as f:
     csv_writer = csv.writer(f)
-    csv_writer.writerow(["Naam", "Datum & Tijd", "Station", "Bericht"])
+
 
 def selecteer_station():
     with open('stations.txt', 'r') as file:
@@ -36,7 +35,8 @@ def input_bericht():  # creeër een functie om het bericht van een bezoeker te k
         print("Uw bericht is te lang")
         input_bericht()
 
-def output_csv():
+
+def output_csv():  # functie die het bericht met de data wegschrijft naar het csv-bestand
     with open("berichten.csv", "a", newline='') as f:
         csv_writer = csv.writer(f)
         csv_writer.writerow([naam, time.strftime('%H:%M:%S, %d %b %y'), station, bericht])
