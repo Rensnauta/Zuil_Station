@@ -39,7 +39,7 @@ def input_bericht():  # creeër een functie om het bericht van een bezoeker te k
 def output_csv():  # functie die het bericht met de data wegschrijft naar het csv-bestand
     with open("berichten.csv", "a", newline='') as f:
         csv_writer = csv.writer(f)
-        csv_writer.writerow([naam, time.strftime('%H:%M:%S, %d %b %y'), station, bericht])
+        csv_writer.writerow([naam, time.strftime('%d %b %y'), station, bericht])
 
 
 while True:

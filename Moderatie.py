@@ -1,20 +1,36 @@
 import csv
+import psycopg2
+import time
 
+email = 'voorbeeld123@email.com'
+naam_mod = 'moderator1'
+connection = "host='20.254.33.20' dbname='stationszuil' user='postgres' password='Welkom01!'"
 
+def database_upload(data):
+    conn = psycopg2.connect(connection)
+    cursor = conn.cursor()
+    query = """INSERT INTO moderatie (gebruikersn, datum, station, bericht, oordeel, datumoordeel,  
+    emailmod, naammod) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
+    cursor.execute(query, data)
+    conn.commit()
+    conn.close()
+
+with open("moderatie.csv", 'w', newline='') as f:
+    pass
 def moderatie():
     with open("berichten.csv", 'r', newline='') as f:
         csv_reader = csv.reader(f)
         for row in csv_reader:
             print(row[3])
-            oordeel = input('Keurt u dit bericht goed? y/n: ')
+            oordeel = input('Keurt u dit bericht goed? y/n:')
             if oordeel == 'y':
-                with open('moderatie.csv', 'a') as file:
-                    row.append('goedgekeurd')
-                    csv.writer(file).writerow(row)
+                with open('moderatie.csv', 'a', newline=''):
+                    row += ['goedgekeurd', time.strftime('%d %b %y'), email, naam_mod]
+                    print(row)
+                    database_upload(row)
             elif oordeel == 'n':
-                with open('moderatie.csv', 'a') as file:
-                    row.append('afgekeurd')
-                    csv.writer(file).writerow(row)
-
+                with open('moderatie.csv', 'a', newline =''):
+                    row += ['afgekeurd', time.strftime('%H:%M:%S, %d %b %y'), email, naam_mod]
+                    database_upload(row)
 
 moderatie()
