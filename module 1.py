@@ -16,7 +16,7 @@ def selecteer_station():
 def input_naam():  # creeër een functie om de naam van een bezoeker te vragen
     naam = input("Wat is uw naam?")
     if len(naam) == 0:
-        print('Naam is anoniem')
+        print('Uw bericht wordt anoniem geplaatst')
         naam = 'Anoniem'
         return naam
     elif len(naam) < 51:  # bepaal of de ingevoerde naam niet te lang is
@@ -39,7 +39,7 @@ def input_bericht():  # creeër een functie om het bericht van een bezoeker te k
 def output_csv():  # functie die het bericht met de data wegschrijft naar het csv-bestand
     with open("berichten.csv", "a", newline='') as f:
         csv_writer = csv.writer(f)
-        csv_writer.writerow([naam, time.strftime('%d %b %y'), station, bericht])
+        csv_writer.writerow([naam, time.strftime('%d %b %y'), time.strftime('%H:%M'), station, bericht])
 
 
 while True:
