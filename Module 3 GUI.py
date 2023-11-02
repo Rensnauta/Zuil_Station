@@ -3,11 +3,14 @@ import requests
 
 station = 'Deventer'
 data = requests.get(f'https://api.openweathermap.org/data/2.5/weather?q={station}&appid'
-                    '=94a3f2911bac471ed9204099e905f0c9')
+                    '=94a3f2911bac471ed9204099e905f0c9&units=metric')
 response = data.json()
 print(response)
 weathericon = response['weather'][0]['icon'] + '.png'
-print(weathericon)
+weatherdescription = response['weather'][0]['description']
+temperature = response['main']['temp']
+weerbericht = str(weatherdescription) + '\n' + str(temperature) + '°C'
+print(weerbericht)
 lst = []
 connection = "host='20.254.33.20' dbname='stationszuil' user='postgres' password='Welkom01!'"
 
@@ -68,6 +71,11 @@ weathericon = PhotoImage(file=f"Weather Icons/{weathericon}")
 label = Label(master=root,
               image=weathericon, borderwidth=0, background='#FFCC18')
 label.place(x=0, y=200)
+
+label = Label(master=root,
+              text=weerbericht,
+              background='#FFCC18')
+label.place(x=15, y=300)
 
 if station_services[0][2] is True:
     ov_fiets = PhotoImage(file="img_ovfiets.png")
