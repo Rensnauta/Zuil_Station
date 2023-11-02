@@ -1,11 +1,13 @@
 import psycopg2
 import requests
 
-station = 'Den Haag'
+station = 'Deventer'
 data = requests.get(f'https://api.openweathermap.org/data/2.5/weather?q={station}&appid'
                     '=94a3f2911bac471ed9204099e905f0c9')
 response = data.json()
 print(response)
+weathericon = response['weather'][0]['icon'] + '.png'
+print(weathericon)
 lst = []
 connection = "host='20.254.33.20' dbname='stationszuil' user='postgres' password='Welkom01!'"
 
@@ -62,7 +64,7 @@ image = PhotoImage(file="NS.png")
 label = Label(root, image=image, borderwidth=0, background='#FFCC18')
 label.place(x=0, y=0)
 
-weathericon = PhotoImage(file="Weather Icons/01d.png")
+weathericon = PhotoImage(file=f"Weather Icons/{weathericon}")
 label = Label(master=root,
               image=weathericon, borderwidth=0, background='#FFCC18')
 label.place(x=0, y=200)
