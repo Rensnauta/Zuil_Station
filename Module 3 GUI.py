@@ -1,5 +1,9 @@
 import psycopg2
+import requests
 
+data = requests.get('https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&appid'
+                    '=94a3f2911bac471ed9204099e905f0c9')
+response = data.json()
 berichten = []
 lst = []
 connection = "host='20.254.33.20' dbname='stationszuil' user='postgres' password='Welkom01!'"
@@ -23,6 +27,7 @@ database_retrieve()
 
 from tkinter import *
 root = Tk()
+root.configure(bg='#FFCC18')
 for i in range(len(lst)):
     label = Label(master=root,
     text=lst[i],
