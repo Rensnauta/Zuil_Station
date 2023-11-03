@@ -1,19 +1,39 @@
 import psycopg2
 import requests
+from tkinter import *
 
-station = 'Deventer'
+lst = []
+
+
+def station_selectie():
+    root = Tk()
+    root.title()
+    root.configure(bg='#FFCC18')
+    root.geometry("600x800")
+    option_label = Label(root, text="Selecteer uw station",
+                         background='#000066',
+                         foreground='White',
+                         font=('Helvetica', 25))
+    option_label.pack()
+    stations = ["Deventer", "Den Haag", "Hengelo"]
+    geselecteerd = StringVar()
+    dropdown = OptionMenu(root, geselecteerd, *stations)
+    dropdown.pack()
+    send_button = Button(root, text="Bevestigen", command=lambda: root.destroy())
+    send_button.pack()
+    root.mainloop()
+    return geselecteerd.get()
+
+
+station = station_selectie()
 data = requests.get(f'https://api.openweathermap.org/data/2.5/weather?q={station}&appid'
                     '=94a3f2911bac471ed9204099e905f0c9&units=metric')
 response = data.json()
-print(response)
 weathericon = response['weather'][0]['icon'] + '.png'
 weatherdescription = response['weather'][0]['description']
 temperature = response['main']['temp']
 weerbericht = str(weatherdescription) + '\n' + str(temperature) + '°C'
-print(weerbericht)
-lst = []
 connection = "host='20.254.33.20' dbname='stationszuil' user='postgres' password='Welkom01!'"
-
 
 
 def database_retrieve():
@@ -30,19 +50,20 @@ def database_retrieve():
         lst.append(opslag)
     conn.close()
 
+
 def station_service():
     conn = psycopg2.connect(connection)
     cursor = conn.cursor()
-    cursor.execute("""SELECT * FROM station_service WHERE station_city = %s""",(station,))
+    cursor.execute("""SELECT * FROM station_service WHERE station_city = %s""", (station,))
     services = cursor.fetchall()
     conn.close()
     return services
+
 
 station_services = station_service()
 
 database_retrieve()
 
-from tkinter import *
 root = Tk()
 root.title(station)
 root.configure(bg='#FFCC18')
@@ -104,11 +125,6 @@ if station_services[0][5] is True:
     label.pack(anchor='ne')
 else:
     pass
-
-
-
-
-
 
 root.mainloop()
 
