@@ -29,13 +29,11 @@ def moderatie():
             print(row[4])
             oordeel = input('Keurt u dit bericht goed? y/n:')
             if oordeel == 'y':
-                with open('moderatie.csv', 'a', newline=''):
-                    row += ['goedgekeurd', time.strftime('%H:%M:%S'), time.strftime('%d %b %y'), email, naam_mod]
-                    database_upload(row)
+                row += ['goedgekeurd', time.strftime('%H:%M:%S'), time.strftime('%d %b %y'), email, naam_mod]
+                database_upload(row)
             elif oordeel == 'n':
-                with open('moderatie.csv', 'a', newline=''):
-                    row += ['afgekeurd', time.strftime('%H:%M:%S'), time.strftime('%d %b %y'), email, naam_mod]
-                    database_upload(row)
+                row += ['afgekeurd', time.strftime('%H:%M:%S'), time.strftime('%d %b %y'), email, naam_mod]
+                database_upload(row)
             else:
                 print('Er is iets misgegaan')
                 moderatie()

@@ -9,7 +9,10 @@ def station_selectie():
     root = Tk()
     root.title()
     root.configure(bg='#FFCC18')
-    root.geometry("600x800")
+    root.geometry("800x400")
+    image = PhotoImage(file="NS.png")
+    label = Label(root, image=image, borderwidth=0, background='#FFCC18')
+    label.place(x=0, y=0)
     option_label = Label(root, text="Selecteer uw station",
                          background='#000066',
                          foreground='White',
