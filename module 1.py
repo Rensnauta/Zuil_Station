@@ -7,9 +7,9 @@ with open("berichten.csv", 'w', newline='') as f:
 
 
 def selecteer_station():
-    with open('stations.txt', 'r') as file:
-        stations = (file.read().splitlines())
-        keuze = random.choice(stations)
+    with open('stations.txt', 'r') as file:  # open het bestand met alle stations
+        stations = (file.read().splitlines())  # sla de inhoud op in een lijst
+        keuze = random.choice(stations)  # kies een random station uit de lijst
         return keuze
 
 
@@ -42,7 +42,7 @@ def output_csv():  # functie die het bericht met de data wegschrijft naar het cs
         csv_writer.writerow([naam, time.strftime('%d %b %y'), time.strftime('%H:%M:%S'), station, bericht])
 
 
-while True:
+while True:  # loop die allefuncties herhaalt
     selecteer_station()
     naam = input_naam()
     bericht = input_bericht()
