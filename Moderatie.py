@@ -2,25 +2,37 @@ import csv
 import psycopg2
 import time
 
-
-email = 'voorbeeld123@email.com'
-naam_mod = 'moderator1'
 connection = "host='20.254.33.20' dbname='stationszuil' user='postgres' password='Welkom01!'"
+lst = []
+
+def inloggen():
+    email = input('Email:')
+    wachtwoord = input('Wachtwoord:')
+    try:
+        conn = psycopg2.connect(connection)  # verbind met de database via de connection variabele
+        cursor = conn.cursor()
+        query = "SELECT moderator_id FROM moderator WHERE email_mod = %s AND wachtwoord = %s"
+        cursor.execute(query, (email, wachtwoord))
+        id = cursor.fetchall()
+        conn.close()
+        return id
+    except psycopg2.Error:
+        print('Er is iets misgegaan')
+        inloggen()
+
+
+
+mod_id = inloggen()
 
 
 def database_upload(data):
-    conn = psycopg2.connect(connection)
+    conn = psycopg2.connect(connection)  # verbind met de database via de connection variabele
     cursor = conn.cursor()
-    query = """INSERT INTO moderatie (gebruikersn, datum, tijd, station, bericht, oordeel, tijdoordeel, 
-    datumoordeel,  emailmod, naammod) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+    query = """INSERT INTO moderatie (naam, bericht, tijd, station, bericht, oordeel, tijdoordeel, 
+    datumoordeel,) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
     cursor.execute(query, data)
     conn.commit()
     conn.close()
-
-
-with open("moderatie.csv", 'w', newline='') as f:
-    pass
-
 
 def moderatie():
     with open("berichten.csv", 'r', newline='') as file:
@@ -29,10 +41,10 @@ def moderatie():
             print(row[4])
             oordeel = input('Keurt u dit bericht goed? y/n:')
             if oordeel == 'y':
-                row += ['goedgekeurd', time.strftime('%H:%M:%S'), time.strftime('%d %b %y'), email, naam_mod]
+                row += ['goedgekeurd', time.strftime('%H:%M:%S'), time.strftime('%d %b %y')]
                 database_upload(row)
             elif oordeel == 'n':
-                row += ['afgekeurd', time.strftime('%H:%M:%S'), time.strftime('%d %b %y'), email, naam_mod]
+                row += ['afgekeurd', time.strftime('%H:%M:%S'), time.strftime('%d %b %y')]
                 database_upload(row)
             else:
                 print('Er is iets misgegaan')

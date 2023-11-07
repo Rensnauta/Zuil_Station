@@ -29,8 +29,8 @@ def station_selectie():
 
 
 station = station_selectie()
-data = requests.get(f'https://api.openweathermap.org/data/2.5/weather?q={station}&appid'
-                    '=94a3f2911bac471ed9204099e905f0c9&units=metric')
+data = requests.get(f"https://api.openweathermap.org/data/2.5/weather?q={station}&appid"
+                    "=94a3f2911bac471ed9204099e905f0c9&units=metric")
 response = data.json()
 weathericon = response['weather'][0]['icon'] + '.png'
 weatherdescription = response['weather'][0]['description']
@@ -42,8 +42,7 @@ connection = "host='20.254.33.20' dbname='stationszuil' user='postgres' password
 def database_retrieve():
     conn = psycopg2.connect(connection)
     cursor = conn.cursor()
-    cursor.execute(
-        """SELECT gebruikersn, datum, bericht FROM moderatie WHERE oordeel = 'goedgekeurd' order by berichtid desc limit 5""")
+    cursor.execute("SELECT gebruikersn, datum, bericht FROM moderatie WHERE oordeel = 'goedgekeurd' order by berichtid desc limit 5")
     data = cursor.fetchall()
     for i in data:
         naam = i[0]
