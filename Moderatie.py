@@ -30,7 +30,8 @@ def moderatie():
             else:
                 print('Er is iets misgegaan')
                 moderatie()
-
+    with open("berichten.csv", 'w'):  # maak het bestand leeg
+        pass
 
 def inloggen():
     # email = input('Email:')
