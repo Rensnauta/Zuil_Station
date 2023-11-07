@@ -19,7 +19,7 @@ def moderatie():
     with open("berichten.csv", 'r', newline='') as file:
         csv_reader = csv.reader(file)
         for row in csv_reader:
-            print(row[4])
+            print(row[0], ', ', row[4])
             oordeel = input('Keurt u dit bericht goed? y/n:')
             if oordeel == 'y':
                 row += ['goedgekeurd', time.strftime('%H:%M:%S'), time.strftime('%d %b %y'), mod_id]

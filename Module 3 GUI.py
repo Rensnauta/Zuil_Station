@@ -5,7 +5,7 @@ from tkinter import *
 lst = []
 
 
-def station_selectie():
+def station_selectie():  # GUI waar een station geselecteerd kan worden
     root = Tk()
     root.title()
     root.configure(bg='#FFCC18')
@@ -20,26 +20,27 @@ def station_selectie():
     option_label.pack()
     stations = ["Deventer", "Den Haag", "Hengelo"]
     geselecteerd = StringVar()
-    dropdown = OptionMenu(root, geselecteerd, *stations)
+    dropdown = OptionMenu(root, geselecteerd, *stations)  # dropdownmenu met 3 stations
     dropdown.pack()
     send_button = Button(root, text="Bevestigen", command=lambda: root.destroy())
-    send_button.pack()
     root.mainloop()
     return geselecteerd.get()
 
 
-station = station_selectie()
+station = station_selectie()  # slaat het geselecteerde station op
 data = requests.get(f"https://api.openweathermap.org/data/2.5/weather?q={station}&appid"
-                    "=94a3f2911bac471ed9204099e905f0c9&units=metric")
+                    "=94a3f2911bac471ed9204099e905f0c9&units=metric")  # API-url
 response = data.json()
+# sla de benodige waardes op in variabelen
 weathericon = response['weather'][0]['icon'] + '.png'
 weatherdescription = response['weather'][0]['description']
 temperature = response['main']['temp']
 weerbericht = str(weatherdescription) + '\n' + str(temperature) + '°C'
+# connectiestring voor de database
 connection = "host='20.254.33.20' dbname='stationszuil' user='postgres' password='Welkom01!'"
 
 
-def database_retrieve():
+def database_retrieve(): # functie om de goedgekeurde berichten uit de database te halen
     conn = psycopg2.connect(connection)
     cursor = conn.cursor()
     cursor.execute(
@@ -48,16 +49,16 @@ def database_retrieve():
         "full join station_service on station_service.station_city = bericht.station_fk "
         "where oordeel = 'goedgekeurd' order by bericht_id desc limit 5")
     data = cursor.fetchall()
-    for i in data:
+    for i in data:  # haal de waardes uit een lijst en sla ze op in losse variabelen
         naam = i[0]
         datum = i[1]
         bericht = i[2]
-        opslag = '\n' + naam + ': ' + bericht + ' \n ' + str(datum)
+        opslag = '\n' + naam + ': ' + bericht + ' \n ' + str(datum)  # voeg de variabelen samen tot een string
         lst.append(opslag)
-    conn.close()
+    conn.close()  # sluit de connectie
 
 
-def station_service():
+def station_service():  # functie om de services die aanwezig zijn op het station te bepalen
     conn = psycopg2.connect(connection)
     cursor = conn.cursor()
     cursor.execute("""SELECT * FROM station_service WHERE station_city = %s""", (station,))
@@ -82,7 +83,7 @@ label = Label(master=root,
               font=('Helvetica', 25, 'bold'))
 label.pack(side='top')
 
-for i in range(len(lst)):
+for i in range(len(lst)):  # maakt voor ieder bericht een label aan in de GUI
     label = Label(master=root,
                   text=lst[i],
                   background='#000066',
@@ -90,11 +91,11 @@ for i in range(len(lst)):
                   font=('Helvetica', 14))
     label.pack(side='bottom', fill='x')
 
-image = PhotoImage(file="NS.png")
+image = PhotoImage(file="NS.png")  # voegt het NS logo linksboven toe
 label = Label(root, image=image, borderwidth=0, background='#FFCC18')
 label.place(x=0, y=0)
 
-weathericon = PhotoImage(file=f"Weather Icons/{weathericon}")
+weathericon = PhotoImage(file=f"Weather Icons/{weathericon}")  # plaats een icoon bij het weerbericht
 label = Label(master=root,
               image=weathericon, borderwidth=0, background='#FFCC18')
 label.place(x=0, y=200)
@@ -104,6 +105,8 @@ label = Label(master=root,
               background='#FFCC18')
 label.place(x=15, y=300)
 
+# de volgende blokken code bepalen voor elke service of het aanwezig is op het station een plaats indien nodig
+# een afbeelding van de service
 if station_services[0][2] is True:
     ov_fiets = PhotoImage(file="img_ovfiets.png")
     label = Label(root, image=ov_fiets, borderwidth=0, background='#FFCC18')
@@ -134,4 +137,4 @@ else:
 
 root.mainloop()
 
-database_retrieve()
+
