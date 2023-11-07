@@ -42,13 +42,17 @@ connection = "host='20.254.33.20' dbname='stationszuil' user='postgres' password
 def database_retrieve():
     conn = psycopg2.connect(connection)
     cursor = conn.cursor()
-    cursor.execute("SELECT gebruikersn, datum, bericht FROM moderatie WHERE oordeel = 'goedgekeurd' order by berichtid desc limit 5")
+    cursor.execute(
+        "select bericht.naam, bericht.datum_bericht, bericht.bericht from moderator "
+        "full join bericht on bericht.moderator_id = moderator.moderator_id "
+        "full join station_service on station_service.station_city = bericht.station_fk "
+        "where oordeel = 'goedgekeurd' order by bericht_id desc limit 5")
     data = cursor.fetchall()
     for i in data:
         naam = i[0]
         datum = i[1]
         bericht = i[2]
-        opslag = '\n' + naam + ': ' + bericht + ' \n ' + datum
+        opslag = '\n' + naam + ': ' + bericht + ' \n ' + str(datum)
         lst.append(opslag)
     conn.close()
 
