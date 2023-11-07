@@ -23,6 +23,7 @@ def station_selectie():  # GUI waar een station geselecteerd kan worden
     dropdown = OptionMenu(root, geselecteerd, *stations)  # dropdownmenu met 3 stations
     dropdown.pack()
     send_button = Button(root, text="Bevestigen", command=lambda: root.destroy())
+    send_button.pack()
     root.mainloop()
     return geselecteerd.get()
 
