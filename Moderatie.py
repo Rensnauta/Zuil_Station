@@ -10,34 +10,32 @@ def database_upload(data):
     cursor = conn.cursor()
     query = """INSERT INTO bericht(naam, datum_bericht, tijd_bericht, station_fk, bericht, oordeel, 
     tijd_oordeel, datum_oordeel, moderator_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"""
-    cursor.execute(query, data)
+    cursor.execute(query, data)  # voer de query uit met de data
     conn.commit()
     conn.close()
 
 
 def moderatie():
-    with open("berichten.csv", 'r', newline='') as file:
+    with open("berichten.csv", 'r', newline='') as file:  # open het bestand
         csv_reader = csv.reader(file)
-        for row in csv_reader:
-            print(row[0], ', ', row[4])
+        for row in csv_reader:  # voor iedere regel in het bestand
+            print(row[0], ', ', row[4])  # print de naam en het bericht
             oordeel = input('Keurt u dit bericht goed? y/n:')
-            if oordeel == 'y':
+            if oordeel == 'y':  # wanneer goedgekeurd, upload naar de database
                 row += ['goedgekeurd', time.strftime('%H:%M:%S'), time.strftime('%d %b %y'), mod_id]
                 database_upload(row)
-            elif oordeel == 'n':
+            elif oordeel == 'n':  # wanneer afgekeurd, upload naar de database
                 row += ['afgekeurd', time.strftime('%H:%M:%S'), time.strftime('%d %b %y'), mod_id]
                 database_upload(row)
-            else:
+            else:  # als er iets anders wordt ingevuld dan y of n
                 print('Er is iets misgegaan')
                 moderatie()
     with open("berichten.csv", 'w'):  # maak het bestand leeg
         pass
 
 def inloggen():
-    # email = input('Email:')
-    # wachtwoord = input('Wachtwoord:')
-    email = 'voorbeeld123@email.com'
-    wachtwoord = 'Welkom01!'
+    email = input('Email:')
+    wachtwoord = input('Wachtwoord:')
     try:
         conn = psycopg2.connect(connection)  # verbind met de database via de connection variabele
         cursor = conn.cursor()
