@@ -15,24 +15,19 @@ def inloggen():
         cursor.execute(query, (email, wachtwoord))
         id = cursor.fetchall()
         conn.close()
+        for i in id:
+            column_value = i[0]
+            break
+        else:
+            raise ValueError()
         return id
-    except psycopg2.Error:
+    except ValueError:
         print('Er is iets misgegaan')
         inloggen()
 
 
-
 mod_id = inloggen()
 
-
-def database_upload(data):
-    conn = psycopg2.connect(connection)  # verbind met de database via de connection variabele
-    cursor = conn.cursor()
-    query = """INSERT INTO moderatie (naam, bericht, tijd, station, bericht, oordeel, tijdoordeel, 
-    datumoordeel,) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
-    cursor.execute(query, data)
-    conn.commit()
-    conn.close()
 
 def moderatie():
     with open("berichten.csv", 'r', newline='') as file:
@@ -50,5 +45,13 @@ def moderatie():
                 print('Er is iets misgegaan')
                 moderatie()
 
+def database_upload(data):
+    conn = psycopg2.connect(connection)  # verbind met de database via de connection variabele
+    cursor = conn.cursor()
+    query = """INSERT INTO moderatie (naam, bericht, tijd, station, bericht, oordeel, tijdoordeel, 
+    datumoordeel,) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
+    cursor.execute(query, data)
+    conn.commit()
+    conn.close()
 
 moderatie()
